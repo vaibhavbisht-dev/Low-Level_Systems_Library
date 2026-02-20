@@ -56,6 +56,40 @@ public:
 
 	}
 
+	void push_back(T&& value) {
+		
+		// Check if size_ == capacity_ 
+		// increase capacity_ exponentianally if true
+		if (size_ == capacity_) {
+			size_t new_capacity = (capacity_ == 0) ? 1 : capacity_ * 2;
+			reserve(new_capacity);
+		}
+
+		// add new data 
+		// data_ + 0: Address 0x1000 (First element)
+		// data_ + 1: Address 0x1004 (Second element)
+		new (data_ + size_) T(std::move(value));
+		// increase size
+		++size_;
+	}
+
+	void push_back(const T& value) {
+
+		// Check if size_ == capacity_ 
+		// increase capacity_ exponentianally if true
+		if (size_ == capacity_) {
+			size_t new_capacity = (capacity_ == 0) ? 1 : capacity_ * 2;
+			reserve(new_capacity);
+		}
+
+		// add new data 
+		// data_ + 0: Address 0x1000 (First element)
+		// data_ + 1: Address 0x1004 (Second element)
+		new (data_ + size_) T(value);
+		// increase size
+		++size_;
+	}
+
 private:
 	T* data_;
 	size_t size_;
