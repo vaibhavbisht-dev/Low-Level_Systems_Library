@@ -21,11 +21,14 @@ struct Test {
         std::cout << "Destroy " << value << "\n";
     }
 };
-	DynamicArray<Test> arr;
-	arr.push_back(Test(1));
-	arr.push_back(Test(2));
-	arr.push_back(Test(3));
+	DynamicArray<Test> a;
+a.push_back(Test(1));
+a.push_back(Test(2));
 
+DynamicArray<Test> b;
+b.push_back(Test(99));
+
+b = a;
 	return 0;
 }
 

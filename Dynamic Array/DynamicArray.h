@@ -8,12 +8,30 @@ template<typename T>
 class DynamicArray {
 
 public:
+
 	// Construction of The object
-	DynamicArray():
+	DynamicArray()
+		: data_(nullptr),
+		size_(0),
+		capacity_(0)
+	{
+	}
+	
+	DynamicArray(const DynamicArray& other):
 		data_(nullptr),
 		size_(0),
 		capacity_(0)
-	{}
+	{
+		if (other.capacity_ == 0)
+			return;
+		data_ = static_cast<T*>(:: operator new(sizeof(T) * other.capacity_));
+		capacity_ = other.capacity_;
+		size_ = other.size_;
+
+		for (size_t i = 0; i < size_; i++) {
+			new(data_ + i) T(other.data_[i]);
+		}
+	}
 
 
 	// destriction of each object in the data_
@@ -23,6 +41,51 @@ public:
 		}
 
 		::operator delete(data_);
+	}
+
+	/**
+	* Overloaded Assignment Operator
+	* handles deep copying of one dynamic array to another 
+	*/
+	
+	DynamicArray& operator=(const DynamicArray& other) {
+		// 1. Self-assignment guard: check if we are assigning the object to itself
+		if (this == &other)
+			return *this;
+
+		// 2. Cleanup: Manually call destructors for existing elements
+		for (size_t i = 0; i < size_; ++i)
+		{
+			data_[i].~T();
+		}
+
+		// 3. Free the raw memory block
+		::operator delete(data_);
+
+		// Reset state to ensure consistency in case the rest of the function fails
+		data_ = nullptr;
+		size_ = 0;
+		capacity_ = 0;
+
+		// 4. If the source array is empty, we are done
+		if (other.capacity_ == 0)
+			return *this;
+
+		// 5. Allocation: Allocate a new block of raw memory based on the source's capacity
+		data_ = static_cast<T*>(::operator new(sizeof(T) * other.capacity_));
+		capacity_ = other.capacity_;
+		size_ = other.size_;
+
+
+		// 6. Copy Construction: Use "placement new" to call the copy constructor 
+		// for each element into the newly allocated raw memory
+		for (size_t i = 0; i < size_; ++i)
+		{
+			new (data_ + i) T(other.data_[i]);
+		}
+
+		return *this;
+
 	}
 
 	void reserve(size_t new_capacity) {
