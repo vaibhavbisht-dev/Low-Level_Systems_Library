@@ -8,6 +8,14 @@ template<typename T>
 class DynamicArray {
 
 public:
+	/// <summary>
+	/// An iterator type that provides pointer-based access to elements of type T.
+	/// </summary>
+	using iterator = T*;
+	/// <summary>
+	/// A constant iterator type for traversing elements without modification.
+	/// </summary>
+	using const_iterator = const T*;
 
 	/// <summary>
 	/// Constructs an empty DynamicArray with no allocated memory.
@@ -218,9 +226,62 @@ public:
 		++size_;
 	}
 
+
+	/// <summary>
+	/// Returns an iterator to the beginning of the container.
+	/// </summary>
+	/// <returns>An iterator pointing to the first element.</returns>
+	iterator begin() noexcept {
+		return data_;
+	}
+	/// <summary>
+	/// Returns an iterator to the end of the container.
+	/// </summary>
+	/// <returns>An iterator pointing to one past the last element.</returns>
+	iterator end() noexcept {
+		return data_ + size_;
+	}
+
+	/// <summary>
+	/// Returns a constant iterator to the beginning of the container.
+	/// </summary>
+	/// <returns>A const_iterator pointing to the first element, or the underlying data pointer.</returns>
+	const_iterator begin() const noexcept {
+		return data_;
+	}
+	
+	/// <summary>
+	/// Returns a const iterator to the end of the container.
+	/// </summary>
+	/// <returns>A const iterator pointing to the position one past the last element.</returns>
+	const_iterator end() const noexcept {
+		return data_ + size_;
+	}
+
+	/// <summary>
+	/// Returns a constant iterator to the beginning of the container.
+	/// </summary>
+	/// <returns>A constant iterator pointing to the first element.</returns>
+	const_iterator cbegin() const noexcept {
+		return data_;
+	}
+
+	/// <summary>
+	/// Returns a constant iterator to the end of the container.
+	/// </summary>
+	/// <returns>A constant iterator pointing to the position one past the last element.</returns>
+	const_iterator cend() const noexcept {
+		return data_ + size_;
+	}
+
+
+
+
+
 private:
 	T* data_;
 	size_t size_;
 	size_t capacity_;
+
 
 };

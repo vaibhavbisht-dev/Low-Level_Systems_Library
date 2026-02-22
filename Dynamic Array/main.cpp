@@ -1,5 +1,6 @@
 #include<iostream>
 #include"DynamicArray.h"
+#include <algorithm>
 
 int main() {
 struct Test {
@@ -22,8 +23,20 @@ struct Test {
     }
 };
     DynamicArray<Test> arr;
-    arr.emplace_back(10);
-    arr.emplace_back(20);
+    arr.emplace_back(1);
+    arr.emplace_back(2);
+    arr.emplace_back(3);
+    arr.emplace_back(4);
+    arr.emplace_back(5);
+
+    for (auto& x : arr)
+    {
+        std::cout << x.value << "\n";
+    }
+
+    std::for_each(arr.begin(), arr.end(), [](const Test& t) {
+    std::cout << t.value << "\n";
+    });
 
 	return 0;
 }
