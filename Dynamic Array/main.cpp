@@ -26,17 +26,22 @@ struct Test {
     arr.emplace_back(1);
     arr.emplace_back(2);
     arr.emplace_back(3);
-    arr.emplace_back(4);
-    arr.emplace_back(5);
 
-    for (auto& x : arr)
+    std::cout << arr[1].value << "\n";     // should print 2
+
+    arr[1].value = 42;
+    std::cout << arr[1].value << "\n";     // should print 42
+
+    try
     {
-        std::cout << x.value << "\n";
+        arr.at(10);
+    }
+    catch (const std::out_of_range& e)
+    {
+        std::cout << "Exception caught\n";
     }
 
-    std::for_each(arr.begin(), arr.end(), [](const Test& t) {
-    std::cout << t.value << "\n";
-    });
+    
 
 	return 0;
 }

@@ -3,6 +3,7 @@
 #include <cstddef>  
 #include <new>  
 #include <utility>   
+#include <stdexcept>
 
 template<typename T>
 class DynamicArray {
@@ -272,6 +273,47 @@ public:
 	/// <returns>A constant iterator pointing to the position one past the last element.</returns>
 	const_iterator cend() const noexcept {
 		return data_ + size_;
+	}
+
+
+	/// <summary>
+	/// Accesses the element at the specified index.
+	/// </summary>
+	/// <param name="index">The zero-based index of the element to access.</param>
+	/// <returns>A reference to the element at the specified index.</returns>
+	T& operator[](size_t index) noexcept {
+		return data_[index];
+	}
+
+	/// <summary>
+	/// Accesses the element at the specified index without bounds checking.
+	/// </summary>
+	/// <param name="index">The zero-based index of the element to access.</param>
+	/// <returns>A const reference to the element at the specified index.</returns>
+	const T& operator[](size_t index) const noexcept {
+		return data_[index];
+	}
+
+	/// <summary>
+	/// Accesses the element at the specified index with bounds checking.
+	/// </summary>
+	/// <param name="index">The zero-based index of the element to access.</param>
+	/// <returns>A reference to the element at the specified index.</returns>
+	T& at(size_t index) {
+		if (index >= size_)
+			throw std::out_of_range("DyanmicArray::at - index out of range");
+		return data_[index];
+	}
+
+	/// <summary>
+	/// Accesses the element at the specified index with bounds checking.
+	/// </summary>
+	/// <param name="index">The zero-based index of the element to access.</param>
+	/// <returns>A constant reference to the element at the specified index.</returns>
+	const T& at(size_t index) const {
+		if (index >= size_)
+			throw std::out_of_range("DynamicArray::at - index out of range");
+		return data_[index];
 	}
 
 
