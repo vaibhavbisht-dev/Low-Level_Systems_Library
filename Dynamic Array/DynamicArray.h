@@ -9,14 +9,19 @@ class DynamicArray {
 
 public:
 
-	// Construction of The object
+	/// <summary>
+	/// Constructs an empty DynamicArray with no allocated memory.
+	/// </summary>
 	DynamicArray(): 
 		data_(nullptr),
 		size_(0),
 		capacity_(0)
 	{
 	}
-	
+	/// <summary>
+	/// Copy constructor that creates a deep copy of another DynamicArray.
+	/// </summary>
+	/// <param name="other">The DynamicArray to copy from.</param>
 	DynamicArray(const DynamicArray& other):
 		data_(nullptr),
 		size_(0),
@@ -34,7 +39,9 @@ public:
 	}
 
 
-	// destriction of each object in the data_
+	/// <summary>
+	/// Destructor that cleans up the dynamic array by destroying all elements and deallocating memory.
+	/// </summary>
 	~DynamicArray() {
 		for (size_t i = 0; i < size_; i++) {
 			data_[i].~T();
@@ -47,7 +54,6 @@ public:
 	* Overloaded Assignment Operator
 	* handles deep copying of one dynamic array to another 
 	*/
-	
 	DynamicArray& operator=(const DynamicArray& other) {
 		// 1. Self-assignment guard: check if we are assigning the object to itself
 		if (this == &other)
@@ -88,6 +94,10 @@ public:
 
 	}
 
+	/// <summary>
+	/// Reserves storage capacity for the container without changing its size.
+	/// </summary>
+	/// <param name="new_capacity">The new capacity to reserve. If less than or equal to the current capacity, no action is taken.</param>
 	void reserve(size_t new_capacity) {
 		// 1. if the requested capacity is less than or equal to the old capacity do nothing
 		if (new_capacity <= capacity_)
@@ -118,7 +128,10 @@ public:
 
 
 	}
-
+	/// <summary>
+	/// Adds an element to the end of the container by moving the provided value.
+	/// </summary>
+	/// <param name="value">An rvalue reference to the element to be moved into the container.</param>
 	void push_back(T&& value) {
 		
 		// Check if size_ == capacity_ 
@@ -135,7 +148,10 @@ public:
 		// increase size
 		++size_;
 	}
-
+	/// <summary>
+	/// Adds an element to the end of the container by moving the provided value.
+	/// </summary>
+	/// <param name="value">A reference to the element to be moved into the container.</param>
 	void push_back(const T& value) {
 
 		// Check if size_ == capacity_ 
@@ -153,7 +169,10 @@ public:
 		++size_;
 	}
 
-
+	/// <summary>
+	/// Resizes the container to contain the specified number of elements.
+	/// </summary>
+	/// <param name="new_size">The new size of the container.</param>
 	void resize(size_t new_size) {
 		if (new_size < size_) {
 			for (size_t i = new_size; i < size_; ++i) {
