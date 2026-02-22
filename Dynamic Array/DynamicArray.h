@@ -10,8 +10,8 @@ class DynamicArray {
 public:
 
 	// Construction of The object
-	DynamicArray()
-		: data_(nullptr),
+	DynamicArray(): 
+		data_(nullptr),
 		size_(0),
 		capacity_(0)
 	{
@@ -151,6 +151,27 @@ public:
 		new (data_ + size_) T(value);
 		// increase size
 		++size_;
+	}
+
+
+	void resize(size_t new_size) {
+		if (new_size < size_) {
+			for (size_t i = new_size; i < size_; ++i) {
+				data_[i].~T();
+			}
+			size_ = new_size;
+		}
+		else if (new_size > size_) {
+			if (new_size > capacity_) {
+				reserve(new_size);
+			}
+
+			for (size_t i = size_; i < new_size; ++i) {
+				new (data_ + i) T();
+			}
+
+			size_ = new_size;
+		}
 	}
 
 private:

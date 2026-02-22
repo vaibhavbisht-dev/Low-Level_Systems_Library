@@ -5,6 +5,10 @@ int main() {
 struct Test {
     int value;
 
+    Test() : value(0) {
+        std::cout << "Default Construct\n";
+    }
+
     Test(int v) : value(v) {
         std::cout << "Construct " << value << "\n";
     }
@@ -21,14 +25,13 @@ struct Test {
         std::cout << "Destroy " << value << "\n";
     }
 };
-	DynamicArray<Test> a;
-a.push_back(Test(1));
-a.push_back(Test(2));
+	DynamicArray<Test> arr;
+    arr.resize(3);
 
-DynamicArray<Test> b;
-b.push_back(Test(99));
+    arr.resize(1);
 
-b = a;
+    arr.resize(5);
+
 	return 0;
 }
 
