@@ -192,6 +192,31 @@ public:
 			size_ = new_size;
 		}
 	}
+	/// <summary>
+	/// Constructs an element in-place at the end of the container.
+	/// This avoids unnecessary copy/move operations by forwarding arguments directly to the constructor.
+	/// </summary>
+	/// <typeparam name="Args">Variadic template parameter pack for the constructor arguments.</typeparam>
+	/// <param name="args">The arguments to forward to the constructor of type T.</param>
+	template <typename... Args>
+	void emplace_back(Args&&... args) {
+		// Check if the internal buffer is full
+		if (size_ == capacity_) {
+			// Simple geometric expansion: start at 1 or double the current capacity
+			size_t new_capacity = (capacity_ == 0) ? 1 : capacity_ * 2;
+			reserve(new_capacity);
+		}
+
+		/**
+		 * Placement New:
+		 * Constructs the object of type T directly at the memory address (data_ + size_).
+		 * std::forward preserves the value category (lvalue/rvalue) of the arguments.
+		 */
+		new (data_ + size_) T(std::forward<Args>(args)...);
+
+		// Increment logical size after successful construction
+		++size_;
+	}
 
 private:
 	T* data_;
