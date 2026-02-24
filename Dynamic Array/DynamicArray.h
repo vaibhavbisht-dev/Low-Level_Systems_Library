@@ -108,34 +108,42 @@ public:
 	/// </summary>
 	/// <param name="new_capacity">The new capacity to reserve. If less than or equal to the current capacity, no action is taken.</param>
 	void reserve(size_t new_capacity) {
-		// 1. if the requested capacity is less than or equal to the old capacity do nothing
-		if (new_capacity <= capacity_)
+		// 1. Optimization: Only expand. If the requested capacity is smaller, do nothing.
+		if (new_capacity < capacity_)
 			return;
 
-		//2. allocate raw memory for new capacity
+		// 2. Allocation: Allocate raw memory for the new capacity without calling constructors yet.
 		T* new_data = static_cast<T*>(::operator new(sizeof(T) * new_capacity));
+		size_t i = 0;
 
-		// 3. Transfer existing elements to the new memory location
-		for (size_t i = 0; i < size_; i++) {
-			// Uses "Placement New" to construct the object in the new memory 
-			// using the Move Constructor to avoid expensive copies
-			new (new_data + i) T(std::move(data_[i]));
+		try {
+			// 3. Migration: Move (or copy) existing elements into the new memory block.
+			// std::move_if_noexcept ensures strong exception safety if the move constructor might throw.
+			for (; i < size_; ++i) {
+				new (new_data + i) T(std::move_if_noexcept(data_[i]));
+			}
+		}
+		catch (...) {
+			// 4. Rollback: If an element constructor throws, destroy all successfully moved/copied 
+			// elements and free the new memory to prevent leaks.
+			for (size_t j = 0; j < i; ++j) {
+				new_data[j].~T();
+			}
+			::operator delete(new_data);
+			throw; // Re-throw the exception to the caller.
 		}
 
-		// 4. Explicitly call destructors for the objects in the old memory block
-		for (size_t i = 0; i < size_; i++) {
-
-			data_[i].~T();
+		// 5. Cleanup: Destroy the old elements in the original memory block.
+		for (size_t j = 0; j < size_; ++j) {
+			data_[j].~T();
 		}
 
-		// 5. Free the raw memory of the old buffer
+		// 6. Deallocation: Free the original raw memory block.
 		::operator delete(data_);
 
-		// 6. Update the internal pointers and capacity value
+		// 7. Update State: Point the internal pointer to the new buffer and update the capacity.
 		data_ = new_data;
 		capacity_ = new_capacity;
-
-
 	}
 	/// <summary>
 	/// Adds an element to the end of the container by moving the provided value.

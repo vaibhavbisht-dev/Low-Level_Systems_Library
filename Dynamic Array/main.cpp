@@ -14,9 +14,15 @@ struct Test {
         std::cout << "Copy " << value << "\n";
     }
 
-    Test(Test&& other) noexcept : value(other.value) {
-        std::cout << "Move " << value << "\n";
-    }
+    Test(Test&& other)
+{
+    std::cout << "Move " << other.value << "\n";
+
+    if (other.value == 2)
+        throw std::runtime_error("Move failed");
+
+    value = other.value;
+}
 
     ~Test() {
         std::cout << "Destroy " << value << "\n";
@@ -25,21 +31,7 @@ struct Test {
     DynamicArray<Test> arr;
     arr.emplace_back(1);
     arr.emplace_back(2);
-    arr.emplace_back(3);
-
-    std::cout << arr[1].value << "\n";     // should print 2
-
-    arr[1].value = 42;
-    std::cout << arr[1].value << "\n";     // should print 42
-
-    try
-    {
-        arr.at(10);
-    }
-    catch (const std::out_of_range& e)
-    {
-        std::cout << "Exception caught\n";
-    }
+    arr.emplace_back(3); // triggers reallocation
 
     
 
