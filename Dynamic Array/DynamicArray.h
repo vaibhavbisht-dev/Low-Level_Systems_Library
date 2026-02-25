@@ -324,13 +324,75 @@ public:
 		return data_[index];
 	}
 
+	/// <summary>
+	/// Removes the element at the specified position from the container.
+	/// </summary>
+	/// <param name="pos">Iterator pointing to the element to be removed.</param>
+	/// <returns>Iterator pointing to the position where the element was removed, or the end iterator if the position was out of bounds.</returns>
+	iterator erase(iterator pos) {
 
+		// Convert the iterator to an index for easier calculations
+		size_t index = pos - data_;
+		// Do nothing if the index is out of bounds and return end() to indicate no valid position
+		if (index >= size_)
+			return end();
+
+		// Shift elements to the left starting from the removal point to fill the gap created by the erased element.
+		// Each Element is overwritten by the next one via move assignment.
+		// std::move_if_noexcept is used to ensure strong exception safety if the move assignment operator might throw.
+		for (size_t i = index; i < size_ - 1; ++i) {
+			data_[i] = std::move_if_noexcept(data_[i + 1]);
+		}
+		// Destroy the last element which is now a duplicate after the shift
+		data_[size_ - 1].~T();
+		// update the size of the container to reflect the removal of one element
+		--size_;
+
+		// Return an iterator to the position where the element was removed
+		return data_ + index;
+	}
+
+	/// <summary>
+	/// Removes a range of elements from the container.
+	/// </summary>
+	/// <param name="first">Iterator to the beginning of the range to erase.</param>
+	/// <param name="last">Iterator to the end of the range to erase (one past the last element to remove).</param>
+	/// <returns>An iterator pointing to the element that followed the last erased element, or the position of 'first' if the range was empty.</returns>
+	iterator erase(iterator first, iterator last) {
+		// No element to erase, return first to indicate no change
+		if (first == last)
+			return first;
+		
+		// Convert iterators to indicies for easier calculations
+		size_t first_index = first - data_;
+		size_t last_index = last - data_;
+		// Get Count of elements to be removed
+		size_t count = last_index - first_index;
+
+		// override the elements to be removed by shifting the subsequent elements to the left
+		for (size_t i = last_index; i < size_; ++i) {
+			data_[i - count] = std::move_if_noexcept(data_[i]);
+		}
+
+		// Remove the dupicate elements at the end of the container which are now invalid after the shift
+		for(size_t i = size_ - count; i< size_; ++i) {
+			data_[i].~T();
+		}
+
+		// Update the size of the container to reflect the removal of the specified range of the elements
+		size_ -= count;
+		// Return the iterator to the position where the first element was removed, which is now occupied by the first element after the removed range
+		return data_ + first_index;
+	}
 
 
 
 private:
+	// Internal pointer to the dynamically allocated array of elements of type T.
 	T* data_;
+	// The number of elements currently stored in the container. This represents the logical size of the array.
 	size_t size_;
+	// The total capacity of the container, which indicates how many elements can be stored before needing to allocate more memory. This is the physical size of the allocated array.
 	size_t capacity_;
 
 
