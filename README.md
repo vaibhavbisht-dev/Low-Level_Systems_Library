@@ -8,7 +8,7 @@ This repository documents my progression toward AAA-level engine programming by 
 
 ## Completed Components
 
-### 1. DynamicArray (Vector-like Container)
+### 1. [DynamicArray](DynamicArray/README.md)
 
 A custom implementation of a dynamically resizable contiguous container similar in functionality to `std::vector`, built using raw memory management.
 
@@ -86,5 +86,6 @@ This repository serves as a public record of building foundational engine system
 - Systems-level C++ architecture
 
 ---
+
 
 More systems will be added incrementally as they are designed and implemented.
