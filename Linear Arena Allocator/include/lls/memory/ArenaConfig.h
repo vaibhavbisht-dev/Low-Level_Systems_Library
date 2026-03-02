@@ -10,7 +10,7 @@ namespace lls::memory::config {
 	constexpr bool enable_debug_poison = true; // Enable or disable debug poisoning of memory
 #else
 	constexpr bool enable_allocation_tracking = false; // Enable or disable allocation tracking
-	constexpr bool enable_high_watermark = false; // Enable or disable high watermark tracking
+	constexpr bool enable_high_water_mark = false; // Enable or disable high watermark tracking
 	constexpr bool enable_debug_poison = false; // Enable or disable debug poisoning of memory
 #endif // !defined(LLS_DEBUG)
 
