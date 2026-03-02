@@ -21,7 +21,7 @@ namespace lls::memory
 	/// <param name="value">The original value to align.</param>
 	/// <param name="alignment">The alignment boundary (must be a power of two).</param>
 	/// <returns>The value rounded up to the nearest alignment boundary.</returns>
-	constexpr std::size_t align_forward(size_t value, size_t alignment) noexcept {
+	constexpr size_t align_forward(size_t value, size_t alignment) noexcept {
 		LLS_ASSERT(alignment != 0, "Aligment Should Not be 0");
 		LLS_ASSERT(is_power_of_two(alignment), "Alignemnt should be a power of two");
 		const size_t mask = alignment - 1;
@@ -37,7 +37,7 @@ namespace lls::memory
 	inline std::byte* align_forward(std::byte* ptr, size_t alignment) noexcept {
 		LLS_ASSERT(ptr != nullptr, "Pointer Must Not Be NULL");
 		const uintptr_t value = reinterpret_cast<uintptr_t>(ptr);
-		const uintptr_t aligned = align_forward(value, alignment);
+		const uintptr_t aligned = static_cast<uintptr_t>(align_forward(static_cast<size_t>(value), alignment));
 		return reinterpret_cast<std::byte*>(aligned);
 	}
 
