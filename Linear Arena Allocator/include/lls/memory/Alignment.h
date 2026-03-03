@@ -2,9 +2,19 @@
 
 #include <cstddef>
 #include <cstdint>
+
+// Ensure std::byte is available (C++17)
+#if !defined(__cpp_lib_byte) || __cpp_lib_byte < 201603L
+namespace std {
+	enum class byte : unsigned char {};
+}
+#endif
+
 #include "lls/core/Assert.h"
 
-namespace lls::memory 
+namespace lls 
+{
+namespace memory 
 {
 	/// <summary>
 	/// Checks if a given value is a power of two.
@@ -50,4 +60,5 @@ namespace lls::memory
 	constexpr size_t align_padding(size_t value, size_t alignment) noexcept {
 		return align_forward(value, alignment) - value;
 	}
+}
 }

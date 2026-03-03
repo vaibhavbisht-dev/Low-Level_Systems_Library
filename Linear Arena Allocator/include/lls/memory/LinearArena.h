@@ -3,12 +3,22 @@
 #include <cstdint>
 #include <type_traits>
 
+// Ensure std::byte is available (C++17)
+#if !defined(__cpp_lib_byte) || __cpp_lib_byte < 201603L
+namespace std {
+	enum class byte : unsigned char {};
+}
+#endif
+
 #include "lls/memory/Alignment.h"
 #include "lls/memory/ArenaConfig.h"
 #include "lls/core/Assert.h"
 
 
-namespace lls::memory {
+namespace lls 
+{
+namespace memory 
+{
 	class LinearArena {
 	public:
 
@@ -31,7 +41,7 @@ namespace lls::memory {
 		LinearArena& operator=(const LinearArena&) = delete;
 
 		LinearArena(LinearArena&& other) noexcept;
-		LinearArena& operator=(const LinearArena&&) noexcept;
+		LinearArena& operator=(LinearArena&& other) noexcept;
 
 		~LinearArena() = default;
 
@@ -39,7 +49,7 @@ namespace lls::memory {
 		// Alloction Interface
 		//============================================================================
 
-		void allocate(size_t size, size_t alignment);
+		void* allocate(size_t size, size_t alignment);
 
 		template<typename T>
 		T* allocate() {
@@ -52,9 +62,9 @@ namespace lls::memory {
 		//============================================================================
 		// ARENA Control
 		//============================================================================
-		
+
 		void reset() noexcept;
-		void remaining() const noexcept;
+		size_t remaining() const noexcept;
 
 		//============================================================================
 		// Debug / Telemetry
@@ -71,7 +81,7 @@ namespace lls::memory {
 		// Data Layout
 		// ============================================================
 
-		std::byte* m_base;
+		std::byte* m_begin;
 		std::byte* m_current;
 		std::byte* m_end;
 
@@ -83,4 +93,5 @@ namespace lls::memory {
 #endif // defined(LLS_DEBUG)
 
 	};
+}
 }

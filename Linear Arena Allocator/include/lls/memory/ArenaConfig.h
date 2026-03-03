@@ -1,7 +1,12 @@
 #pragma once
 
 
-namespace lls::memory::config {
+namespace lls 
+{
+namespace memory 
+{
+namespace config 
+{
 
 
 #ifndef defined(LLS_DEBUG)
@@ -15,4 +20,6 @@ namespace lls::memory::config {
 #endif // !defined(LLS_DEBUG)
 
 	constexpr unsigned char debug_fill_pattern = 0xCD; // Pattern used for debug poisoning
+}
+}
 }
