@@ -116,8 +116,8 @@ namespace memory
 	void* LinearArena::allocate(size_t size, size_t alignment) {
 		
 		LLS_ASSERT(m_begin != nullptr, "LinearArena used after moved or not initialized");
-		LLS_ASSERT(size > 0, "LinearAreana Size should be greater that 0");
-		LLS_ASSERT(alignment > 0, "LinearAreana alignment should be greater than 0");
+		LLS_ASSERT(size > 0, "LinearArena Size should be greater that 0");
+		LLS_ASSERT(alignment > 0, "LinearArena alignment should be greater than 0");
 		LLS_ASSERT(alignment <= k_max_alignment,
 			"Requested alignment exceeds maximum supported alignment");
 		LLS_ASSERT(is_power_of_two(alignment), "Alignment must be a power of two");
@@ -145,6 +145,38 @@ namespace memory
 		return aligned;
 
 	}
+
+	LinearArena::marker_t LinearArena::get_marker() const noexcept {
+		LLS_ASSERT(m_begin != nullptr, "LinearArena is used after move or not initialized");
+		return m_current;
+	}
+
+	void LinearArena::reset_to_marker(marker_t marker) noexcept {
+		LLS_ASSERT(m_begin != nullptr,
+			"LinearArena is used after move or not initialized");
+
+		LLS_ASSERT(marker >= m_begin,
+			"Marker is before arena begin");
+
+		LLS_ASSERT(marker <= m_current,
+			"Marker is ahead of current allocation pointer");
+
+#if defined(LLS_DEBUG)
+		if constexpr (config::enable_debug_poison)
+		{
+			const size_t bytes_to_poison =
+				static_cast<size_t>(m_current - marker);
+
+			std::memset(marker,
+				config::debug_fill_pattern,
+				bytes_to_poison);
+		}
+#endif
+
+		m_current = marker;
+	}
+
+
 
 	void LinearArena::reset() noexcept {
 		LLS_ASSERT(m_begin != nullptr, "LinearArena used after move or not initialized");

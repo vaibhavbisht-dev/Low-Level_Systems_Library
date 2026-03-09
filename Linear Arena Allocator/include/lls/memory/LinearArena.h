@@ -22,6 +22,9 @@ namespace memory
 	class LinearArena {
 	public:
 
+		using marker_t = std::byte*;
+
+
 		//============================================================================
 		// Types
 		//============================================================================
@@ -65,6 +68,8 @@ namespace memory
 
 		void reset() noexcept;
 		size_t remaining() const noexcept;
+		marker_t get_marker() const noexcept;
+		void reset_to_marker(marker_t marker) noexcept;
 
 		//============================================================================
 		// Debug / Telemetry
@@ -86,6 +91,7 @@ namespace memory
 		std::byte* m_end;
 
 		oom_handler_t m_oom_handler;
+		
 
 #if defined(LLS_DEBUG)
 		size_t m_allocation_count;
