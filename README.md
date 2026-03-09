@@ -215,10 +215,10 @@ The arena allocator will serve as a foundation for:
 At this stage, the repository contains:
 
 - DynamicArray implementation
+- Linear Arena Allocator
 
 Future components will include:
 
-- Linear Arena Allocator
 - Stack Allocator
 - Pool Allocator
 - Custom String
@@ -240,6 +240,7 @@ This repository serves as a public record of building foundational engine system
 ---
 
 More systems will be added incrementally as they are designed and implemented.
+
 
 
 
