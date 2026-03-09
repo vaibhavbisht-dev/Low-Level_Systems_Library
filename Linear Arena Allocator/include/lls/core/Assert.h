@@ -1,14 +1,23 @@
 #pragma once
 
-#include <cassert>
+#include <cstdlib>
+#include <iostream>
 
-#if defined(_DEBUG)
-#define LLS_ASSERT(condition, message) \
-    do { \
-        if (!(condition)) { \
-            assert((condition) && (message)); \
-        } \
-    } while (0)
+#ifdef LLS_DEBUG
+
+#define LLS_ASSERT(condition, message)           \
+    do                                           \
+    {                                            \
+        if (!(condition))                        \
+        {                                        \
+            std::cerr << "Assertion Failed: "    \
+                      << message << std::endl;   \
+            std::abort();                        \
+        }                                        \
+    } while (false)
+
 #else
+
 #define LLS_ASSERT(condition, message) ((void)0)
-#endif // defined(_DEBUG)
+
+#endif
