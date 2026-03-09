@@ -58,34 +58,7 @@ A custom implementation of a dynamically resizable contiguous container similar 
 
 ---
 
-## Current Scope
 
-At this stage, the repository contains:
-
-- DynamicArray implementation
-
-Future components will include:
-
-- Linear Arena Allocator
-- Stack Allocator
-- Pool Allocator
-- Custom String
-- Hash Map
-- Job System prototypes
-
----
-
-## Purpose
-
-This repository serves as a public record of building foundational engine systems from scratch to develop deep expertise in:
-
-- Memory management
-- Object lifetime control
-- Cache-aware design
-- Exception safety
-- Systems-level C++ architecture
-
----
 ### 2. [Linear Arena Allocator](Linear%20Arena%20Allocator/README.md)
 
 A high-performance linear arena allocator designed for engine-level systems where allocations are frequent, short-lived, and freed in bulk. The allocator operates on a contiguous memory block and provides extremely fast $O(1)$ allocations by moving a cursor forward through the memory region.
@@ -237,7 +210,36 @@ The arena allocator will serve as a foundation for:
 * ECS memory subsystems.
 
 ---
+## Current Scope
+
+At this stage, the repository contains:
+
+- DynamicArray implementation
+
+Future components will include:
+
+- Linear Arena Allocator
+- Stack Allocator
+- Pool Allocator
+- Custom String
+- Hash Map
+- Job System prototypes
+
+---
+
+## Purpose
+
+This repository serves as a public record of building foundational engine systems from scratch to develop deep expertise in:
+
+- Memory management
+- Object lifetime control
+- Cache-aware design
+- Exception safety
+- Systems-level C++ architecture
+
+---
 
 More systems will be added incrementally as they are designed and implemented.
+
 
 
