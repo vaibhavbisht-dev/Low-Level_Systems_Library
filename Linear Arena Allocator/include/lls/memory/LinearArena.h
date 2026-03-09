@@ -68,6 +68,7 @@ namespace memory
 
 		void reset() noexcept;
 		size_t remaining() const noexcept;
+		size_t used() const noexcept;
 		marker_t get_marker() const noexcept;
 		void reset_to_marker(marker_t marker) noexcept;
 

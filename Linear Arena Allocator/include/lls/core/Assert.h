@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#ifdef _DEBUG
+#if defined(_DEBUG)
 #define LLS_ASSERT(condition, message) \
     do { \
         if (!(condition)) { \
@@ -11,4 +11,4 @@
     } while (0)
 #else
 #define LLS_ASSERT(condition, message) ((void)0)
-#endif
+#endif // defined(_DEBUG)

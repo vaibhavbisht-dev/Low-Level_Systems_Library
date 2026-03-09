@@ -9,7 +9,7 @@ namespace config
 {
 
 
-#ifndef defined(LLS_DEBUG)
+#if !defined(LLS_DEBUG)
 	constexpr bool enable_allocation_tracking = true; // Enable or disable allocation tracking
 	constexpr bool enable_high_watermark = true; // Enable or disable high watermark tracking
 	constexpr bool enable_debug_poison = true; // Enable or disable debug poisoning of memory

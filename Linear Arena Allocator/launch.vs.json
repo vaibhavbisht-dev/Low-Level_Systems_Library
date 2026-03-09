@@ -1,0 +1,13 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "native",
+      "project": "tests\\LinearArenaTests.cpp",
+      "name": "LinearArenaTests",
+      "currentDir": "${workspaceRoot}",
+      "args": []
+    }
+  ]
+}
